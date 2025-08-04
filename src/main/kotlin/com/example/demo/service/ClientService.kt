@@ -3,11 +3,23 @@ package com.example.demo.service
 import org.springframework.stereotype.Service
 import com.example.demo.model.Client
 import com.example.demo.repository.ClientRepository
+import com.example.demo.model.Account
+import com.example.demo.repository.AccountRepository
+import java.util.UUID
 
 @Service
-class ClientService(private val clientRepository: ClientRepository) {
+class ClientService(
+    private val clientRepository: ClientRepository,
+    private val accountRepository: AccountRepository
+) {
     fun createClient(client: Client): Client {
-        return clientRepository.save(client)
+        val accountNumber = UUID.randomUUID().toString().substring(0, 10)
+        val account = Account(accountNumber = accountNumber, balance = 0.0)
+        val clientWithAccount = client.copy(account = account)
+        val savedClient = clientRepository.save(clientWithAccount)
+        val savedAccount = account.copy(client = savedClient)
+        accountRepository.save(savedAccount)
+        return savedClient
     }
     fun getAllClients(): List<Client> {
         return clientRepository.findAll()

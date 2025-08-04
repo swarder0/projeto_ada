@@ -2,33 +2,37 @@ package com.example.demo.controller
 
 import com.example.demo.service.ClientService
 import com.example.demo.model.Client
+import com.example.demo.dto.ClientDTO
+import com.example.demo.dto.AccountDTO
+import com.example.demo.model.toDTO
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+
 
 @RestController
 @RequestMapping("/api")
 class ClientController(private val clientService: ClientService) {
 
     @PostMapping("/clients")
-    fun createClient(@RequestBody client: Client): ResponseEntity<Client> {
+    fun createClient(@RequestBody client: Client): ResponseEntity<ClientDTO> {
         val savedClient = clientService.createClient(client)
-        return ResponseEntity.ok(savedClient)
+        return ResponseEntity.ok(savedClient.toDTO())
     }
 
     @GetMapping("/clients")
-    fun getAllClients(): ResponseEntity<List<Client>> {
-        val clients = clientService.getAllClients()
+    fun getAllClients(): ResponseEntity<List<ClientDTO>> {
+        val clients = clientService.getAllClients().map { it.toDTO() }
         return ResponseEntity.ok(clients)
     }
 
     @GetMapping("/clients/{id}")
-    fun getClientById(@PathVariable id: Long): ResponseEntity<Client> {
+    fun getClientById(@PathVariable id: Long): ResponseEntity<ClientDTO> {
         val client = clientService.getClientById(id)
-        return (if (client != null) {
-            ResponseEntity.ok(client)
+        return if (client != null) {
+            ResponseEntity.ok(client.toDTO())
         } else {
             ResponseEntity.notFound().build()
-        }) as ResponseEntity<Client>
+        }
     }
     @PutMapping("/clients/{id}")
     fun updateClient(@PathVariable id: Long, @RequestBody client: Client): ResponseEntity<Client> {

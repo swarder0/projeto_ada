@@ -36,3 +36,21 @@ data class Address(
     val state: String = "",
     val zipCode: String = ""
 )
+
+fun Client.toDTO() = com.example.demo.dto.ClientDTO(
+    id = this.id,
+    name = this.name,
+    email = this.email,
+    cpf = this.cpf,
+    birthDate = this.birthDate.toString(),
+    address = this.address,
+    phone = this.phone,
+    isActive = this.isActive,
+    account = this.account?.let {
+        com.example.demo.dto.AccountDTO(
+            id = it.id,
+            accountNumber = it.accountNumber,
+            balance = it.balance
+        )
+    }
+)
