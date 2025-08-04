@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/src/main/kotlin/com/example/demo/endpoint/GetClient.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/src/main/kotlin/com/example/demo/endpoint/GetClient.kt" />
+              <option name="originalContent" value="package com.example.demo.endpoint&#10;&#10;import com.example.demo.model.Client&#10;import com.example.demo.model.Account&#10;import com.example.demo.model.Payment&#10;import org.springframework.web.bind.annotation.GetMapping&#10;import org.springframework.web.bind.annotation.PathVariable&#10;import org.springframework.web.bind.annotation.RequestMapping&#10;import org.springframework.web.bind.annotation.RestController&#10;&#10;&#10;@GetMapping(&quot;/clients/{id}&quot;)&#10;@RestController&#10;@RequestMapping(&quot;/api&quot;)&#10;class GetClient {" />
+              <option name="updatedContent" value="package com.example.demo.endpoint&#10;&#10;import com.example.demo.model.Client&#10;import com.example.demo.repository.ClientRepository&#10;import org.springframework.http.ResponseEntity&#10;import org.springframework.web.bind.annotation.GetMapping&#10;import org.springframework.web.bind.annotation.PathVariable&#10;import org.springframework.web.bind.annotation.RequestMapping&#10;import org.springframework.web.bind.annotation.RestController&#10;&#10;&#10;@RestController&#10;@RequestMapping(&quot;/api&quot;)&#10;class GetClient(private val clientRepository: ClientRepository) {&#10;    @GetMapping(&quot;/clients/{id}&quot;)&#10;    fun getClientById(@PathVariable id: Long): ResponseEntity&lt;Client&gt; {&#10;        val client = clientRepository.findById(id)&#10;        return if (client.isPresent) {&#10;            ResponseEntity.ok(client.get())&#10;        } else {&#10;            ResponseEntity.notFound().build()&#10;        }&#10;    }&#10;}" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
