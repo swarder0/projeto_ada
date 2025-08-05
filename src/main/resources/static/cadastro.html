@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Banco ADA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0033a0 0%, #0066cc 100%);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px 0 50px 0;
+        }
+        .background-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path fill="%230055b3" fill-opacity="0.1" d="M50 0 L100 50 L50 100 L0 50 Z" /></svg>');
+            background-size: 200px 200px;
+            z-index: -1;
+        }
+        .header {
+            padding: 20px 0;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .logo {
+            font-size: 40px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto 30px auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #0033a0;
+        }
+        .form-control {
+            border: 1px solid #ced4da;
+            padding: 12px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .form-control:focus {
+            border-color: #0033a0;
+            box-shadow: 0 0 0 0.25rem rgba(0, 51, 160, 0.25);
+        }
+        .section-title {
+            margin-top: 25px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #0033a0;
+            color: #0033a0;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        .section-title i {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .alert {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+        .card-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            align-items: center;
+            background-color: rgba(0, 51, 160, 0.1);
+            padding: 10px 15px;
+            border-radius: 8px;
+            color: #0033a0;
+        }
+        .card-badge i {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        .secure-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            color: #6c757d;
+            font-size: 14px;
+            background-color: rgba(0, 51, 160, 0.05);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .secure-info i {
+            margin-right: 8px;
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-pattern"></div>
+
+    <div class="header">
+        <a href="index.html" class="text-decoration-none">
+            <div class="logo">
+                <i class="fas fa-landmark me-2"></i> Banco ADA
+            </div>
+        </a>
+        <p>Crie sua conta bancária e comece a investir no seu futuro</p>
+    </div>
+
+    <div class="container position-relative">
+        <div class="card-badge">
+            <i class="fas fa-university"></i>
+            <span>Abra sua conta<br>100% digital</span>
+        </div>
+
+        <h2 class="text-center mb-4">Cadastro de Cliente</h2>
+
+        <form id="cadastroForm">
+            <!-- Dados Pessoais -->
+            <h5 class="section-title">
+                <i class="fas fa-user"></i> Dados Pessoais
+            </h5>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="nome" class="form-label">Nome Completo</label>
+                    <input type="text" class="form-control" id="nome" name="nome" required>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="cpf" class="form-label">CPF</label>
+                    <input type="text" class="form-control" id="cpf" name="cpf" required>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="nascimento" class="form-label">Data de Nascimento</label>
+                    <input type="date" class="form-control" id="nascimento" name="nascimento" required>
+                </div>
+            </div>
+
+            <!-- Endereço -->
+            <h5 class="section-title">
+                <i class="fas fa-home"></i> Endereço
+            </h5>
+            <div class="row">
+                <div class="col-md-8 form-group">
+                    <label for="rua" class="form-label">Rua</label>
+                    <input type="text" class="form-control" id="rua" name="rua" required>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label for="numero" class="form-label">Número</label>
+                    <input type="text" class="form-control" id="numero" name="numero" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="complemento" class="form-label">Complemento</label>
+                    <input type="text" class="form-control" id="complemento" name="complemento">
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="bairro" class="form-label">Bairro</label>
+                    <input type="text" class="form-control" id="bairro" name="bairro" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="cidade" class="form-label">Cidade</label>
+                    <input type="text" class="form-control" id="cidade" name="cidade" required>
+                </div>
+                <div class="col-md-3 form-group">
+                    <label for="estado" class="form-label">Estado</label>
+                    <input type="text" class="form-control" id="estado" name="estado" required>
+                </div>
+                <div class="col-md-3 form-group">
+                    <label for="cep" class="form-label">CEP</label>
+                    <input type="text" class="form-control" id="cep" name="cep" required>
+                </div>
+            </div>
+
+            <!-- Telefone -->
+            <h5 class="section-title">
+                <i class="fas fa-phone"></i> Telefone
+            </h5>
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    <label for="codigoPais" class="form-label">Código do País</label>
+                    <input type="text" class="form-control" id="codigoPais" name="codigoPais" placeholder="+55" required>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label for="ddd" class="form-label">DDD</label>
+                    <input type="text" class="form-control" id="ddd" name="ddd" required>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label for="telefone" class="form-label">Número</label>
+                    <input type="text" class="form-control" id="telefone" name="telefone" required>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-check-circle me-2"></i>Cadastrar
+                </button>
+                <a href="index.html" class="btn btn-secondary ms-2">
+                    <i class="fas fa-arrow-left me-2"></i>Voltar
+                </a>
+            </div>
+        </form>
+
+        <div class="alert alert-danger mt-3" id="errorAlert"></div>
+        <div class="alert alert-success mt-3" id="successAlert"></div>
+
+        <div class="secure-info">
+            <i class="fas fa-shield-alt"></i>
+            Seus dados estão protegidos com o mais alto padrão de segurança. Ao se cadastrar, você concorda com nossa política de privacidade.
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 Banco ADA - Todos os direitos reservados</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/cadastro.js"></script>
+</body>
+</html>

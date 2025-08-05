@@ -1,0 +1,25 @@
+# Arquivos e pastas a serem ignorados
+
+# Arquivos de build
+build/
+.gradle/
+gradle/
+out/
+*.class
+
+# Arquivos de IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Arquivos de banco de dados
+data/
+
+# Arquivos de log
+*.log
+logs/
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db

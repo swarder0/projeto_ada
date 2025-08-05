@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco ADA - Sistema Bancário</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0033a0 0%, #0066cc 100%);
+            padding-top: 50px;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        .background-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path fill="%230055b3" fill-opacity="0.1" d="M50 0 L100 50 L50 100 L0 50 Z" /></svg>');
+            background-size: 200px 200px;
+            z-index: -1;
+        }
+        .header {
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        .logo {
+            font-size: 40px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            color: #333;
+        }
+        .btn-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+        }
+        .btn-primary {
+            background-color: #0033a0;
+            border-color: #0033a0;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #00288f;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .feature-box {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s;
+        }
+        .feature-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: #0033a0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-pattern"></div>
+
+    <div class="header text-center">
+        <div class="logo">
+            <i class="fas fa-landmark me-2"></i> Banco ADA
+        </div>
+        <p>Seu futuro financeiro começa aqui</p>
+    </div>
+
+    <div class="container">
+        <h1 class="mb-4 text-center">Sistema Bancário Digital</h1>
+        <p class="lead text-center">Acesse sua conta ou cadastre-se para começar a desfrutar de nossos serviços</p>
+
+        <div class="btn-container">
+            <a href="login.html" class="btn btn-primary btn-lg">
+                <i class="fas fa-sign-in-alt me-2"></i> Login
+            </a>
+            <a href="cadastro.html" class="btn btn-success btn-lg">
+                <i class="fas fa-user-plus me-2"></i> Cadastre-se
+            </a>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h4>Segurança</h4>
+                    <p>Sua conta protegida com os mais altos padrões de segurança digital.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h4>Investimentos</h4>
+                    <p>Soluções financeiras para fazer seu dinheiro render mais.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h4>Praticidade</h4>
+                    <p>Acesse sua conta quando e onde quiser, com total conveniência.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 Banco ADA - Todos os direitos reservados</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
