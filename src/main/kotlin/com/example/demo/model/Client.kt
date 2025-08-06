@@ -18,7 +18,11 @@ data class Client(
     @OneToOne(mappedBy = "client", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     val account: Account? = null,
     val password: String = ""
-)
+) {
+    init {
+        require(password.length >= 6) { "A senha deve ter no mínimo 6 dígitos." }
+    }
+}
 
 @Embeddable
 data class Phone(

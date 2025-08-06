@@ -1,8 +1,22 @@
+# Build files
 build/
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
 
+# IDE files
+.idea/
 *.iml
 *.ipr
+*.iws
 
-
-
+# OS files
 .DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp

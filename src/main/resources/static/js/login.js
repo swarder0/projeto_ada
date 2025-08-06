@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Coletar dados do formulário
         const email = document.getElementById('email').value;
-        const cpf = document.getElementById('cpf').value;
+        const senha = document.getElementById('senha').value;
 
         // Buscar todos os clientes e verificar as credenciais
         fetch('/api/clients')
@@ -23,8 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 return response.json();
             })
             .then(clients => {
-                // Procurar por um cliente com o email e CPF correspondentes
-                const client = clients.find(c => c.email === email && c.cpf === cpf);
+                // Procurar por um cliente com o email e senha correspondentes
+                const client = clients.find(c => c.email === email && c.password === senha);
 
                 if (client) {
                     // Armazenar informações do cliente na sessão
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }, 1000);
                 } else {
                     // Credenciais inválidas
-                    errorAlert.textContent = 'Email ou CPF inválidos. Por favor, tente novamente.';
+                    errorAlert.textContent = 'Email ou senha inválidos. Por favor, tente novamente.';
                     errorAlert.style.display = 'block';
                 }
             })

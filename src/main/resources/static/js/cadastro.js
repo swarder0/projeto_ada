@@ -10,6 +10,20 @@ document.addEventListener('DOMContentLoaded', function() {
         errorAlert.style.display = 'none';
         successAlert.style.display = 'none';
 
+        // Validação de senha
+        const senha = document.getElementById('senha').value;
+        const repetirSenha = document.getElementById('repetirSenha').value;
+        if (senha.length < 6) {
+            errorAlert.textContent = 'A senha deve ter no mínimo 6 dígitos.';
+            errorAlert.style.display = 'block';
+            return;
+        }
+        if (senha !== repetirSenha) {
+            errorAlert.textContent = 'As senhas não coincidem.';
+            errorAlert.style.display = 'block';
+            return;
+        }
+
         // Coletar dados do formulário
         const clientData = {
             name: document.getElementById('nome').value,
@@ -30,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 areaCode: document.getElementById('ddd').value,
                 numberCode: document.getElementById('telefone').value
             },
+            password: senha,
             isActive: true
         };
 

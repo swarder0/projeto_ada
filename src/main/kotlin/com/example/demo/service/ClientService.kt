@@ -13,11 +13,19 @@ class ClientService(
     private val accountRepository: AccountRepository
 ) {
     fun createClient(client: Client): Client {
+        // Bloqueia cadastro de dois CPFs diferentes para o mesmo email
+        val existingByEmail = clientRepository.findAll().filter { it.email == client.email }
+        if (existingByEmail.any { it.cpf != client.cpf }) {
+            throw IllegalArgumentException("Não é permitido cadastrar dois CPFs diferentes para o mesmo email.")
+        }
         if (clientRepository.existsByCpf(client.cpf)) {
             throw IllegalArgumentException("Já existe um cliente com este CPF.")
         }
         if (clientRepository.existsByEmail(client.email)) {
-            throw IllegalArgumentException("Já existe um cliente com este email.")
+            // Se já existe o email, mas com o mesmo CPF, permite (atualização), senão bloqueia
+            if (existingByEmail.any { it.cpf != client.cpf }) {
+                throw IllegalArgumentException("Já existe um cliente com este email.")
+            }
         }
         if (client.password.length < 6) {
             throw IllegalArgumentException("A senha deve ter pelo menos 6 dígitos.")
