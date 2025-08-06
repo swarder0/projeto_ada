@@ -2,6 +2,9 @@ package com.example.demo.controller
 
 import com.example.demo.service.ClientService
 import com.example.demo.model.Client
+import com.example.demo.dto.ClientDTO
+import com.example.demo.dto.AccountDTO
+import com.example.demo.dto.LoginRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -10,26 +13,71 @@ import org.springframework.web.bind.annotation.*
 class ClientController(private val clientService: ClientService) {
 
     @PostMapping("/clients")
-    fun createClient(@RequestBody client: Client): ResponseEntity<Client> {
+    fun createClient(@RequestBody client: Client): ResponseEntity<ClientDTO> {
         val savedClient = clientService.createClient(client)
-        return ResponseEntity.ok(savedClient)
+        val account = savedClient.account?.let {
+            AccountDTO(it.id, it.accountNumber, it.balance)
+        }
+        val clientDTO = ClientDTO(
+            savedClient.id,
+            savedClient.name,
+            savedClient.email,
+            savedClient.cpf,
+            savedClient.birthDate?.toString(),
+            savedClient.address,
+            savedClient.phone,
+            savedClient.isActive,
+            account
+        )
+        return ResponseEntity.ok(clientDTO)
     }
 
     @GetMapping("/clients")
-    fun getAllClients(): ResponseEntity<List<Client>> {
+    fun getAllClients(): ResponseEntity<List<ClientDTO>> {
         val clients = clientService.getAllClients()
-        return ResponseEntity.ok(clients)
+        val clientDTOs = clients.map { client ->
+            val account = client.account?.let {
+                AccountDTO(it.id, it.accountNumber, it.balance)
+            }
+            ClientDTO(
+                client.id,
+                client.name,
+                client.email,
+                client.cpf,
+                client.birthDate?.toString(),
+                client.address,
+                client.phone,
+                client.isActive,
+                account
+            )
+        }
+        return ResponseEntity.ok(clientDTOs)
     }
 
     @GetMapping("/clients/{id}")
-    fun getClientById(@PathVariable id: Long): ResponseEntity<Client> {
+    fun getClientById(@PathVariable id: Long): ResponseEntity<ClientDTO> {
         val client = clientService.getClientById(id)
-        return (if (client != null) {
-            ResponseEntity.ok(client)
+        return if (client != null) {
+            val account = client.account?.let {
+                AccountDTO(it.id, it.accountNumber, it.balance)
+            }
+            val clientDTO = ClientDTO(
+                client.id,
+                client.name,
+                client.email,
+                client.cpf,
+                client.birthDate?.toString(),
+                client.address,
+                client.phone,
+                client.isActive,
+                account
+            )
+            ResponseEntity.ok(clientDTO)
         } else {
             ResponseEntity.notFound().build()
-        }) as ResponseEntity<Client>
+        }
     }
+
     @PutMapping("/clients/{id}")
     fun updateClient(@PathVariable id: Long, @RequestBody client: Client): ResponseEntity<Client> {
         val updatedClient = clientService.updateClient(id, client)
@@ -39,6 +87,7 @@ class ClientController(private val clientService: ClientService) {
             ResponseEntity.notFound().build()
         }
     }
+
     @DeleteMapping("/clients/{id}")
     fun deleteClient(@PathVariable id: Long): ResponseEntity<Void> {
         return try {
@@ -47,5 +96,11 @@ class ClientController(private val clientService: ClientService) {
         } catch (e: IllegalArgumentException) {
             ResponseEntity.notFound().build()
         }
+    }
+
+    @PostMapping("/login")
+    fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<String> {
+        clientService.login(loginRequest.email, loginRequest.password)
+        return ResponseEntity.ok("Login com sucesso")
     }
 }

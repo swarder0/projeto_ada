@@ -16,14 +16,15 @@ data class Client(
     val phone: Phone,
     val isActive: Boolean = true,
     @OneToOne(mappedBy = "client", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    val account: Account? = null
+    val account: Account? = null,
+    val password: String = ""
 )
 
 @Embeddable
 data class Phone(
     val countryCode: String = "",
     val areaCode: String = "",
-    val numberCode: String = "",
+    val numberCode: String = ""
 )
 
 @Embeddable

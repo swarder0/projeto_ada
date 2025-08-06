@@ -1,5 +1,6 @@
 package com.example.demo.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 
 @Entity
@@ -12,6 +13,6 @@ data class Account(
     val balance: Double = 0.0,
     @OneToOne
     @JoinColumn(name = "client_id")
+    @JsonIgnore
     val client: Client? = null
 )
-

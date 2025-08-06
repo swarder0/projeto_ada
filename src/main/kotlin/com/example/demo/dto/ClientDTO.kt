@@ -22,4 +22,3 @@ data class ClientDTO(
     val isActive: Boolean?,
     val account: AccountDTO?
 )
-

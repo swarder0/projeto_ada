@@ -13,6 +13,15 @@ class ClientService(
     private val accountRepository: AccountRepository
 ) {
     fun createClient(client: Client): Client {
+        if (clientRepository.existsByCpf(client.cpf)) {
+            throw IllegalArgumentException("Já existe um cliente com este CPF.")
+        }
+        if (clientRepository.existsByEmail(client.email)) {
+            throw IllegalArgumentException("Já existe um cliente com este email.")
+        }
+        if (client.password.length < 6) {
+            throw IllegalArgumentException("A senha deve ter pelo menos 6 dígitos.")
+        }
         val accountNumber = UUID.randomUUID().toString().substring(0, 10)
         val account = Account(accountNumber = accountNumber, balance = 0.0)
         val clientWithAccount = client.copy(account = account)
@@ -40,5 +49,13 @@ class ClientService(
         } else {
             throw IllegalArgumentException("Client with id $id does not exist")
         }
+    }
+    fun login(email: String, password: String): Client {
+        val client = clientRepository.findAll().find { it.email == email }
+            ?: throw IllegalArgumentException("Email ou senha inválidos.")
+        if (client.password != password) {
+            throw IllegalArgumentException("Email ou senha inválidos.")
+        }
+        return client
     }
 }
