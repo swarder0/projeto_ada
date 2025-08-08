@@ -13,23 +13,22 @@ class ClientService(
     private val accountRepository: AccountRepository
 ) {
     fun createClient(client: Client): Client {
-        // Bloqueia cadastro de dois CPFs diferentes para o mesmo email
-        val existingByEmail = clientRepository.findAll().filter { it.email == client.email }
-        if (existingByEmail.any { it.cpf != client.cpf }) {
-            throw IllegalArgumentException("Não é permitido cadastrar dois CPFs diferentes para o mesmo email.")
-        }
-        if (clientRepository.existsByCpf(client.cpf)) {
-            throw IllegalArgumentException("Já existe um cliente com este CPF.")
-        }
-        if (clientRepository.existsByEmail(client.email)) {
-            // Se já existe o email, mas com o mesmo CPF, permite (atualização), senão bloqueia
-            if (existingByEmail.any { it.cpf != client.cpf }) {
-                throw IllegalArgumentException("Já existe um cliente com este email.")
-            }
-        }
+        // Validação de senha obrigatória
         if (client.password.length < 6) {
             throw IllegalArgumentException("A senha deve ter pelo menos 6 dígitos.")
         }
+
+        // Bloqueia cadastro se já existe CPF
+        if (clientRepository.existsByCpf(client.cpf)) {
+            throw IllegalArgumentException("Já existe um cliente com este CPF.")
+        }
+
+        // Bloqueia cadastro de dois CPFs diferentes para o mesmo email
+        val existingByEmail = clientRepository.findByEmail(client.email)
+        if (existingByEmail != null && existingByEmail.cpf != client.cpf) {
+            throw IllegalArgumentException("Não é permitido cadastrar dois CPFs diferentes para o mesmo email.")
+        }
+
         val accountNumber = UUID.randomUUID().toString().substring(0, 10)
         val account = Account(accountNumber = accountNumber, balance = 0.0)
         val clientWithAccount = client.copy(account = account)
@@ -59,8 +58,14 @@ class ClientService(
         }
     }
     fun login(email: String, password: String): Client {
-        val client = clientRepository.findAll().find { it.email == email }
+        // Validação de senha mínima no login
+        if (password.length < 6) {
+            throw IllegalArgumentException("A senha deve ter pelo menos 6 dígitos.")
+        }
+
+        val client = clientRepository.findByEmail(email)
             ?: throw IllegalArgumentException("Email ou senha inválidos.")
+
         if (client.password != password) {
             throw IllegalArgumentException("Email ou senha inválidos.")
         }

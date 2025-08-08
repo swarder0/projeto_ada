@@ -2,6 +2,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('loginForm');
     const errorAlert = document.getElementById('errorAlert');
     const successAlert = document.getElementById('successAlert');
+    const passwordField = document.getElementById('password');
+
+    // Validação em tempo real da senha
+    passwordField.addEventListener('input', function() {
+        if (passwordField.value.length > 0 && passwordField.value.length < 6) {
+            passwordField.classList.add('is-invalid');
+        } else {
+            passwordField.classList.remove('is-invalid');
+        }
+    });
 
     form.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -12,45 +22,53 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Coletar dados do formulário
         const email = document.getElementById('email').value;
-        const senha = document.getElementById('senha').value;
+        const password = passwordField.value;
 
-        // Buscar todos os clientes e verificar as credenciais
-        fetch('/api/clients')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Erro ao buscar clientes');
-                }
+        // Validar senha mínima de 6 dígitos
+        if (password.length < 6) {
+            errorAlert.textContent = 'A senha deve ter no mínimo 6 dígitos.';
+            errorAlert.style.display = 'block';
+            return;
+        }
+
+        // Fazer login via API
+        const loginData = {
+            email: email,
+            password: password
+        };
+
+        fetch('/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(loginData)
+        })
+        .then(response => {
+            if (response.ok) {
                 return response.json();
-            })
-            .then(clients => {
-                // Procurar por um cliente com o email e senha correspondentes
-                const client = clients.find(c => c.email === email && c.password === senha);
+            } else {
+                return response.text().then(text => {
+                    throw new Error(text || 'Email ou senha inválidos.');
+                });
+            }
+        })
+        .then(data => {
+            successAlert.textContent = 'Login realizado com sucesso! Redirecionando...';
+            successAlert.style.display = 'block';
 
-                if (client) {
-                    // Armazenar informações do cliente na sessão
-                    sessionStorage.setItem('clientId', client.id);
-                    sessionStorage.setItem('clientName', client.name);
-                    sessionStorage.setItem('clientEmail', client.email);
+            // Armazenar dados do usuário no localStorage
+            localStorage.setItem('userData', JSON.stringify(data));
+            localStorage.setItem('userEmail', email);
 
-                    // Exibir mensagem de sucesso
-                    successAlert.textContent = 'Login realizado com sucesso! Redirecionando...';
-                    successAlert.style.display = 'block';
-
-                    // Redirecionar após 1 segundo (aqui você poderia redirecionar para uma página de área do cliente)
-                    setTimeout(() => {
-                        // Por enquanto, voltamos para a página inicial
-                        window.location.href = 'index.html';
-                    }, 1000);
-                } else {
-                    // Credenciais inválidas
-                    errorAlert.textContent = 'Email ou senha inválidos. Por favor, tente novamente.';
-                    errorAlert.style.display = 'block';
-                }
-            })
-            .catch(error => {
-                // Exibir mensagem de erro
-                errorAlert.textContent = error.message || 'Ocorreu um erro ao processar sua solicitação';
-                errorAlert.style.display = 'block';
-            });
+            // Redirecionar para o dashboard após 1.5 segundos
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1500);
+        })
+        .catch(error => {
+            errorAlert.textContent = error.message;
+            errorAlert.style.display = 'block';
+        });
     });
 });

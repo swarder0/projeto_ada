@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Banco ADA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0033a0 0%, #0066cc 100%);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .background-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path fill="%230055b3" fill-opacity="0.1" d="M50 0 L100 50 L50 100 L0 50 Z" /></svg>');
+            background-size: 200px 200px;
+            z-index: -1;
+        }
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+        .navbar-brand {
+            color: #0033a0 !important;
+            font-weight: bold;
+            font-size: 24px;
+        }
+        .container-main {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .card {
+            background-color: rgba(255, 255, 255, 0.95);
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            color: #333;
+        }
+        .card-header {
+            background-color: #0033a0;
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+            padding: 20px;
+            font-weight: bold;
+        }
+        .balance-card {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+        .balance-amount {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .account-number {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        .btn-banking {
+            background-color: #0033a0;
+            border-color: #0033a0;
+            color: white;
+            padding: 12px 25px;
+            margin: 5px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .btn-banking:hover {
+            background-color: #00288f;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .transaction-item {
+            border-bottom: 1px solid #eee;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        .transaction-in {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .transaction-out {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .action-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            color: #0033a0;
+        }
+        .action-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: #0033a0;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            color: #0033a0;
+        }
+        .modal-header {
+            background-color: #0033a0;
+            color: white;
+        }
+        .alert {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-pattern"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-landmark me-2"></i>Banco ADA
+            </a>
+            <div class="user-info ms-auto">
+                <span id="userName" class="me-3">
+                    <i class="fas fa-user-circle me-2"></i>Bem-vindo!
+                </span>
+                <button class="btn btn-outline-danger" onclick="logout()">
+                    <i class="fas fa-sign-out-alt me-2"></i>Sair
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-main">
+        <!-- Saldo e Informações da Conta -->
+        <div class="card balance-card">
+            <div class="card-body text-center">
+                <h5>Sua Conta</h5>
+                <div class="account-number">
+                    Conta: <span id="accountNumber">Carregando...</span>
+                </div>
+                <div class="balance-amount">
+                    R$ <span id="balance">0,00</span>
+                </div>
+                <p>Saldo disponível</p>
+            </div>
+        </div>
+
+        <!-- Ações Rápidas -->
+        <div class="quick-actions">
+            <a href="#" class="action-card" data-bs-toggle="modal" data-bs-target="#transferModal">
+                <div class="action-icon">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <h6>Transferir</h6>
+                <p>Envie dinheiro para outras contas</p>
+            </a>
+
+            <a href="#" class="action-card" data-bs-toggle="modal" data-bs-target="#depositModal">
+                <div class="action-icon">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+                <h6>Depositar</h6>
+                <p>Adicione dinheiro à sua conta</p>
+            </a>
+
+            <a href="#" class="action-card" data-bs-toggle="modal" data-bs-target="#withdrawModal">
+                <div class="action-icon">
+                    <i class="fas fa-minus-circle"></i>
+                </div>
+                <h6>Sacar</h6>
+                <p>Retire dinheiro da sua conta</p>
+            </a>
+
+            <a href="#" class="action-card" onclick="showStatement()">
+                <div class="action-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <h6>Extrato</h6>
+                <p>Veja suas movimentações</p>
+            </a>
+        </div>
+
+        <!-- Últimas Transações -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-history me-2"></i>Últimas Transações
+            </div>
+            <div class="card-body" id="transactionsList">
+                <p class="text-center text-muted">Nenhuma transação encontrada</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Transferência -->
+    <div class="modal fade" id="transferModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Transferir Dinheiro</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="transferForm">
+                        <div class="mb-3">
+                            <label for="destinationAccount" class="form-label">Conta de Destino</label>
+                            <input type="text" class="form-control" id="destinationAccount" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="transferAmount" class="form-label">Valor</label>
+                            <input type="number" class="form-control" id="transferAmount" step="0.01" min="0.01" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="transferDescription" class="form-label">Descrição (opcional)</label>
+                            <input type="text" class="form-control" id="transferDescription">
+                        </div>
+                    </form>
+                    <div class="alert alert-danger" id="transferError"></div>
+                    <div class="alert alert-success" id="transferSuccess"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="processTransfer()">Confirmar Transferência</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Depósito -->
+    <div class="modal fade" id="depositModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Depositar Dinheiro</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="depositForm">
+                        <div class="mb-3">
+                            <label for="depositAmount" class="form-label">Valor</label>
+                            <input type="number" class="form-control" id="depositAmount" step="0.01" min="0.01" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="depositDescription" class="form-label">Descrição (opcional)</label>
+                            <input type="text" class="form-control" id="depositDescription" placeholder="Ex: Depósito via PIX">
+                        </div>
+                    </form>
+                    <div class="alert alert-danger" id="depositError"></div>
+                    <div class="alert alert-success" id="depositSuccess"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="processDeposit()">Confirmar Depósito</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Saque -->
+    <div class="modal fade" id="withdrawModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sacar Dinheiro</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="withdrawForm">
+                        <div class="mb-3">
+                            <label for="withdrawAmount" class="form-label">Valor</label>
+                            <input type="number" class="form-control" id="withdrawAmount" step="0.01" min="0.01" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="withdrawDescription" class="form-label">Descrição (opcional)</label>
+                            <input type="text" class="form-control" id="withdrawDescription" placeholder="Ex: Saque no ATM">
+                        </div>
+                    </form>
+                    <div class="alert alert-danger" id="withdrawError"></div>
+                    <div class="alert alert-success" id="withdrawSuccess"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="processWithdraw()">Confirmar Saque</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

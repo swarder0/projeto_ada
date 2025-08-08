@@ -3,6 +3,27 @@ document.addEventListener('DOMContentLoaded', function() {
     const errorAlert = document.getElementById('errorAlert');
     const successAlert = document.getElementById('successAlert');
 
+    // Validação em tempo real da senha
+    const senha = document.getElementById('senha');
+    const repetirSenha = document.getElementById('repetirSenha');
+
+    function validarSenhas() {
+        if (senha.value.length > 0 && senha.value.length < 6) {
+            senha.classList.add('is-invalid');
+        } else {
+            senha.classList.remove('is-invalid');
+        }
+
+        if (repetirSenha.value.length > 0 && senha.value !== repetirSenha.value) {
+            repetirSenha.classList.add('is-invalid');
+        } else {
+            repetirSenha.classList.remove('is-invalid');
+        }
+    }
+
+    senha.addEventListener('input', validarSenhas);
+    repetirSenha.addEventListener('input', validarSenhas);
+
     form.addEventListener('submit', function(event) {
         event.preventDefault();
 
@@ -11,14 +32,16 @@ document.addEventListener('DOMContentLoaded', function() {
         successAlert.style.display = 'none';
 
         // Validação de senha
-        const senha = document.getElementById('senha').value;
-        const repetirSenha = document.getElementById('repetirSenha').value;
-        if (senha.length < 6) {
+        const senhaValue = senha.value;
+        const repetirSenhaValue = repetirSenha.value;
+
+        if (senhaValue.length < 6) {
             errorAlert.textContent = 'A senha deve ter no mínimo 6 dígitos.';
             errorAlert.style.display = 'block';
             return;
         }
-        if (senha !== repetirSenha) {
+
+        if (senhaValue !== repetirSenhaValue) {
             errorAlert.textContent = 'As senhas não coincidem.';
             errorAlert.style.display = 'block';
             return;
@@ -44,41 +67,37 @@ document.addEventListener('DOMContentLoaded', function() {
                 areaCode: document.getElementById('ddd').value,
                 numberCode: document.getElementById('telefone').value
             },
-            password: senha,
+            password: senhaValue,
             isActive: true
         };
 
-        // Enviar para a API
+        // Enviar dados para o servidor
         fetch('/api/clients', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(clientData)
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Erro ao cadastrar cliente');
+                return response.text().then(text => {
+                    throw new Error(text);
+                });
             }
             return response.json();
         })
         .then(data => {
-            // Exibir mensagem de sucesso
-            successAlert.textContent = 'Cliente cadastrado com sucesso! Conta criada com número: ' +
-                                     (data.account ? data.account.accountNumber : 'Indisponível');
+            successAlert.innerHTML = `
+                <strong>Cadastro realizado com sucesso!</strong><br>
+                Conta criada: ${data.account.accountNumber}<br>
+                <a href="login.html" class="btn btn-primary mt-2">Fazer Login</a>
+            `;
             successAlert.style.display = 'block';
-
-            // Limpar formulário
             form.reset();
-
-            // Redirecionar após 2 segundos
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 2000);
         })
         .catch(error => {
-            // Exibir mensagem de erro
-            errorAlert.textContent = error.message || 'Ocorreu um erro ao processar sua solicitação';
+            errorAlert.textContent = error.message;
             errorAlert.style.display = 'block';
         });
     });

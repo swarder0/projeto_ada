@@ -9,12 +9,11 @@
     <style>
         body {
             background: linear-gradient(135deg, #0033a0 0%, #0066cc 100%);
-            padding-top: 50px;
             color: white;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            padding: 0;
+            padding: 20px 0;
         }
         .background-pattern {
             position: fixed;
@@ -42,7 +41,7 @@
             max-width: 500px;
             margin: 30px auto;
             background-color: rgba(255, 255, 255, 0.95);
-            padding: 30px;
+            padding: 40px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             color: #333;
@@ -57,9 +56,10 @@
         }
         .form-control {
             border: 1px solid #ced4da;
-            padding: 12px;
+            padding: 15px;
             border-radius: 8px;
             transition: all 0.3s;
+            font-size: 16px;
         }
         .form-control:focus {
             border-color: #0033a0;
@@ -68,13 +68,15 @@
         .btn-primary {
             background-color: #0033a0;
             border-color: #0033a0;
-            padding: 12px 25px;
+            padding: 15px 30px;
             font-weight: 600;
+            font-size: 16px;
+            width: 100%;
             transition: all 0.3s;
         }
         .btn-primary:hover {
             background-color: #00288f;
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
         .btn-secondary {
@@ -86,7 +88,7 @@
         }
         .btn-secondary:hover {
             background-color: #5a6268;
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
         .alert {
@@ -95,30 +97,32 @@
             padding: 15px;
             border-radius: 8px;
         }
+        .login-icon {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .login-icon i {
+            font-size: 60px;
+            color: #0033a0;
+            margin-bottom: 15px;
+        }
         .footer {
             text-align: center;
             margin-top: 30px;
             color: rgba(255, 255, 255, 0.7);
             font-size: 14px;
         }
-        .card-img {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 60px;
-            opacity: 0.8;
-        }
-        .secure-badge {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .links-container {
+            text-align: center;
             margin-top: 20px;
-            color: #6c757d;
-            font-size: 14px;
         }
-        .secure-badge i {
-            margin-right: 8px;
-            color: #28a745;
+        .links-container a {
+            color: #0033a0;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .links-container a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -131,48 +135,55 @@
                 <i class="fas fa-landmark me-2"></i> Banco ADA
             </div>
         </a>
-        <p>Acesse sua conta bancária</p>
+        <p>Acesse sua conta bancária com segurança</p>
     </div>
 
-    <div class="container position-relative">
-        <i class="fas fa-credit-card card-img"></i>
-        <h2 class="text-center mb-4">Login</h2>
+    <div class="container">
+        <div class="login-icon">
+            <i class="fas fa-user-lock"></i>
+            <h2>Login</h2>
+        </div>
 
         <form id="loginForm">
             <div class="form-group">
                 <label for="email" class="form-label">
                     <i class="fas fa-envelope me-2"></i>Email
                 </label>
-                <input type="email" class="form-control" id="email" placeholder="Seu email" required>
+                <input type="email" class="form-control" id="email" name="email" required>
             </div>
 
             <div class="form-group">
-                <label for="senha" class="form-label">
-                    <i class="fas fa-lock me-2"></i>Senha
+                <label for="password" class="form-label">
+                    <i class="fas fa-lock me-2"></i>Senha (mínimo 6 dígitos)
                 </label>
-                <input type="password" class="form-control" id="senha" placeholder="Sua senha" required minlength="6">
+                <input type="password" class="form-control" id="password" name="password" required minlength="6">
+                <div class="invalid-feedback">
+                    A senha deve ter pelo menos 6 dígitos.
+                </div>
             </div>
 
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-sign-in-alt me-2"></i>Entrar
-                </button>
-                <a href="index.html" class="btn btn-secondary ms-2">
-                    <i class="fas fa-arrow-left me-2"></i>Voltar
-                </a>
-            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-sign-in-alt me-2"></i>Entrar
+            </button>
         </form>
 
-        <div class="alert alert-danger mt-3" id="errorAlert"></div>
-        <div class="alert alert-success mt-3" id="successAlert"></div>
+        <div class="alert alert-danger" id="errorAlert"></div>
+        <div class="alert alert-success" id="successAlert"></div>
 
-        <div class="secure-badge">
-            <i class="fas fa-lock"></i> Conexão segura - Seus dados estão protegidos
+        <div class="links-container">
+            <a href="cadastro.html">
+                <i class="fas fa-user-plus me-1"></i>Criar conta
+            </a>
+            |
+            <a href="index.html">
+                <i class="fas fa-arrow-left me-1"></i>Voltar
+            </a>
         </div>
     </div>
 
     <div class="footer">
         <p>&copy; 2025 Banco ADA - Todos os direitos reservados</p>
+        <p><i class="fas fa-shield-alt me-1"></i>Conexão segura e criptografada</p>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

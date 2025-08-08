@@ -13,23 +13,27 @@ import org.springframework.web.bind.annotation.*
 class ClientController(private val clientService: ClientService) {
 
     @PostMapping("/clients")
-    fun createClient(@RequestBody client: Client): ResponseEntity<ClientDTO> {
-        val savedClient = clientService.createClient(client)
-        val account = savedClient.account?.let {
-            AccountDTO(it.id, it.accountNumber, it.balance)
+    fun createClient(@RequestBody client: Client): ResponseEntity<Any> {
+        return try {
+            val savedClient = clientService.createClient(client)
+            val account = savedClient.account?.let {
+                AccountDTO(it.id, it.accountNumber, it.balance)
+            }
+            val clientDTO = ClientDTO(
+                savedClient.id,
+                savedClient.name,
+                savedClient.email,
+                savedClient.cpf,
+                savedClient.birthDate?.toString(),
+                savedClient.address,
+                savedClient.phone,
+                savedClient.isActive,
+                account
+            )
+            ResponseEntity.ok(clientDTO)
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity.badRequest().body(e.message)
         }
-        val clientDTO = ClientDTO(
-            savedClient.id,
-            savedClient.name,
-            savedClient.email,
-            savedClient.cpf,
-            savedClient.birthDate?.toString(),
-            savedClient.address,
-            savedClient.phone,
-            savedClient.isActive,
-            account
-        )
-        return ResponseEntity.ok(clientDTO)
     }
 
     @GetMapping("/clients")
@@ -99,8 +103,26 @@ class ClientController(private val clientService: ClientService) {
     }
 
     @PostMapping("/login")
-    fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<String> {
-        clientService.login(loginRequest.email, loginRequest.password)
-        return ResponseEntity.ok("Login com sucesso")
+    fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<Any> {
+        return try {
+            val client = clientService.login(loginRequest.email, loginRequest.password)
+            val account = client.account?.let {
+                AccountDTO(it.id, it.accountNumber, it.balance)
+            }
+            val clientDTO = ClientDTO(
+                client.id,
+                client.name,
+                client.email,
+                client.cpf,
+                client.birthDate?.toString(),
+                client.address,
+                client.phone,
+                client.isActive,
+                account
+            )
+            ResponseEntity.ok(clientDTO)
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity.badRequest().body(e.message)
+        }
     }
 }

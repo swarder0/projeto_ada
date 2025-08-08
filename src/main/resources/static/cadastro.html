@@ -193,6 +193,27 @@
                 </div>
             </div>
 
+            <!-- Senha -->
+            <h5 class="section-title">
+                <i class="fas fa-lock"></i> Senha de Acesso
+            </h5>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="senha" class="form-label">Senha (mínimo 6 dígitos)</label>
+                    <input type="password" class="form-control" id="senha" name="senha" required minlength="6">
+                    <div class="invalid-feedback">
+                        A senha deve ter pelo menos 6 dígitos.
+                    </div>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="repetirSenha" class="form-label">Repetir Senha</label>
+                    <input type="password" class="form-control" id="repetirSenha" name="repetirSenha" required minlength="6">
+                    <div class="invalid-feedback">
+                        As senhas devem coincidir.
+                    </div>
+                </div>
+            </div>
+
             <!-- Endereço -->
             <h5 class="section-title">
                 <i class="fas fa-home"></i> Endereço
@@ -250,21 +271,6 @@
                 <div class="col-md-4 form-group">
                     <label for="telefone" class="form-label">Número</label>
                     <input type="text" class="form-control" id="telefone" name="telefone" required>
-                </div>
-            </div>
-
-            <!-- Senha -->
-            <h5 class="section-title">
-                <i class="fas fa-lock"></i> Senha de Acesso
-            </h5>
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    <label for="senha" class="form-label">Senha (mínimo 6 dígitos)</label>
-                    <input type="password" class="form-control" id="senha" name="senha" minlength="6" required>
-                </div>
-                <div class="col-md-6 form-group">
-                    <label for="repetirSenha" class="form-label">Repetir Senha</label>
-                    <input type="password" class="form-control" id="repetirSenha" name="repetirSenha" minlength="6" required>
                 </div>
             </div>
 
