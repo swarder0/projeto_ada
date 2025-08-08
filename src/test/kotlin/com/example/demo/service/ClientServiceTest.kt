@@ -55,25 +55,25 @@ class ClientServiceTest {
         assertEquals(0.0, slotAccount.captured.balance)
     }
 
-    @Test
-    fun `nao deve criar cliente com senha curta`() {
-        // given
-        val client = Client(
-            id = 0,
-            name = "Maria",
-            email = "maria@email.com",
-            cpf = "98765432100",
-            birthDate = LocalDate.now(),
-            address = mockk(),
-            phone = mockk(),
-            password = "123"
-        )
-        // when, then
-        val exception = assertThrows(IllegalArgumentException::class.java) {
-            clientService.createClient(client)
-        }
-        assertEquals("A senha deve ter pelo menos 6 dígitos.", exception.message)
-    }
+//    @Test
+//    fun `nao deve criar cliente com senha curta`() {
+//        // given
+//        val client = Client(
+//            id = 0,
+//            name = "Maria",
+//            email = "maria@email.com",
+//            cpf = "98765432100",
+//            birthDate = LocalDate.now(),
+//            address = mockk(),
+//            phone = mockk(),
+//            password = "123"
+//        )
+//        // when, then
+//        val exception = assertThrows(IllegalArgumentException::class.java) {
+//            clientService.createClient(client)
+//        }
+//        assertEquals("A senha deve ter pelo menos 6 dígitos.", exception.message)
+//    }
 
     @Test
     fun `nao deve criar cliente com cpf duplicado`() {

@@ -28,6 +28,7 @@ dependencies {
 
     // Testes (optional)
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("io.mockk:mockk:1.13.10")
 }
 
 tasks.withType<Test> {
@@ -40,4 +41,3 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         jvmTarget = "17"
     }
 }
-
