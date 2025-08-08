@@ -211,7 +211,7 @@
                 <p>Retire dinheiro da sua conta</p>
             </a>
 
-            <a href="#" class="action-card" onclick="showStatement()">
+            <a href="#" class="action-card" data-bs-toggle="modal" data-bs-target="#statementModal">
                 <div class="action-icon">
                     <i class="fas fa-file-alt"></i>
                 </div>
@@ -236,30 +236,62 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Transferir Dinheiro</h5>
+                    <h5 class="modal-title">
+                        <i class="fas fa-exchange-alt me-2"></i>Transferir Dinheiro
+                    </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Como funciona:</strong> Digite o número da conta de destino e o valor que deseja transferir. A transferência será processada instantaneamente e o valor será debitado da sua conta.
+                    </div>
                     <form id="transferForm">
                         <div class="mb-3">
-                            <label for="destinationAccount" class="form-label">Conta de Destino</label>
-                            <input type="text" class="form-control" id="destinationAccount" required>
+                            <label for="destinationAccount" class="form-label">
+                                <i class="fas fa-user me-1"></i>Conta de Destino
+                            </label>
+                            <input type="text" class="form-control" id="destinationAccount"
+                                   placeholder="Digite o número da conta (ex: 12345-6)"
+                                   required>
+                            <div class="form-text">
+                                <i class="fas fa-lightbulb me-1"></i>
+                                Informe o número completo da conta que receberá o valor
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <label for="transferAmount" class="form-label">Valor</label>
-                            <input type="number" class="form-control" id="transferAmount" step="0.01" min="0.01" required>
+                            <label for="transferAmount" class="form-label">
+                                <i class="fas fa-dollar-sign me-1"></i>Valor da Transferência
+                            </label>
+                            <input type="number" class="form-control" id="transferAmount"
+                                   step="0.01" min="0.01" placeholder="0,00" required>
+                            <div class="form-text">
+                                <i class="fas fa-calculator me-1"></i>
+                                Valor mínimo: R$ 0,01 | Seu saldo atual: R$ <span id="currentBalanceTransfer">0,00</span>
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <label for="transferDescription" class="form-label">Descrição (opcional)</label>
-                            <input type="text" class="form-control" id="transferDescription">
+                            <label for="transferDescription" class="form-label">
+                                <i class="fas fa-comment me-1"></i>Descrição da Transferência
+                            </label>
+                            <input type="text" class="form-control" id="transferDescription"
+                                   placeholder="Ex: Pagamento de serviços, Presente, etc.">
+                            <div class="form-text">
+                                <i class="fas fa-tag me-1"></i>
+                                Campo opcional - ajuda a identificar a finalidade da transferência
+                            </div>
                         </div>
                     </form>
                     <div class="alert alert-danger" id="transferError"></div>
                     <div class="alert alert-success" id="transferSuccess"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" onclick="processTransfer()">Confirmar Transferência</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="processTransfer()">
+                        <i class="fas fa-paper-plane me-2"></i>Confirmar Transferência
+                    </button>
                 </div>
             </div>
         </div>
@@ -270,26 +302,64 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Depositar Dinheiro</h5>
+                    <h5 class="modal-title">
+                        <i class="fas fa-plus-circle me-2"></i>Depositar Dinheiro
+                    </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="alert alert-success">
+                        <i class="fas fa-piggy-bank me-2"></i>
+                        <strong>Adicione dinheiro à sua conta:</strong> O depósito será creditado instantaneamente em sua conta. Você pode usar diferentes formas de depósito como PIX, TED, DOC ou dinheiro em espécie.
+                    </div>
                     <form id="depositForm">
                         <div class="mb-3">
-                            <label for="depositAmount" class="form-label">Valor</label>
-                            <input type="number" class="form-control" id="depositAmount" step="0.01" min="0.01" required>
+                            <label for="depositAmount" class="form-label">
+                                <i class="fas fa-coins me-1"></i>Valor do Depósito
+                            </label>
+                            <input type="number" class="form-control" id="depositAmount"
+                                   step="0.01" min="0.01" placeholder="0,00" required>
+                            <div class="form-text">
+                                <i class="fas fa-info me-1"></i>
+                                Valor mínimo para depósito: R$ 0,01 | Não há limite máximo
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <label for="depositDescription" class="form-label">Descrição (opcional)</label>
-                            <input type="text" class="form-control" id="depositDescription" placeholder="Ex: Depósito via PIX">
+                            <label for="depositType" class="form-label">
+                                <i class="fas fa-receipt me-1"></i>Origem do Depósito
+                            </label>
+                            <select class="form-select" id="depositType">
+                                <option value="">Selecione a forma de depósito</option>
+                                <option value="PIX">PIX - Transferência instantânea</option>
+                                <option value="TED">TED - Transferência entre bancos</option>
+                                <option value="DOC">DOC - Documento de Crédito</option>
+                                <option value="DINHEIRO">Dinheiro em espécie</option>
+                                <option value="BOLETO">Pagamento de boleto</option>
+                                <option value="OUTROS">Outros</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="depositDescription" class="form-label">
+                                <i class="fas fa-edit me-1"></i>Descrição Adicional (Opcional)
+                            </label>
+                            <input type="text" class="form-control" id="depositDescription"
+                                   placeholder="Ex: Salário, Freelance, Vendas, etc.">
+                            <div class="form-text">
+                                <i class="fas fa-bookmark me-1"></i>
+                                Ajuda a organizar e identificar seus depósitos no extrato
+                            </div>
                         </div>
                     </form>
                     <div class="alert alert-danger" id="depositError"></div>
                     <div class="alert alert-success" id="depositSuccess"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" onclick="processDeposit()">Confirmar Depósito</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="processDeposit()">
+                        <i class="fas fa-check me-2"></i>Confirmar Depósito
+                    </button>
                 </div>
             </div>
         </div>
@@ -300,26 +370,149 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Sacar Dinheiro</h5>
+                    <h5 class="modal-title">
+                        <i class="fas fa-minus-circle me-2"></i>Sacar Dinheiro
+                    </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Retire dinheiro da sua conta:</strong> O valor será debitado instantaneamente. Certifique-se de que possui saldo suficiente para a operação.
+                    </div>
                     <form id="withdrawForm">
                         <div class="mb-3">
-                            <label for="withdrawAmount" class="form-label">Valor</label>
-                            <input type="number" class="form-control" id="withdrawAmount" step="0.01" min="0.01" required>
+                            <label for="withdrawAmount" class="form-label">
+                                <i class="fas fa-money-bill-wave me-1"></i>Valor do Saque
+                            </label>
+                            <input type="number" class="form-control" id="withdrawAmount"
+                                   step="0.01" min="0.01" placeholder="0,00" required>
+                            <div class="form-text">
+                                <i class="fas fa-wallet me-1"></i>
+                                Saldo disponível: R$ <span id="currentBalanceWithdraw">0,00</span> | Valor mínimo: R$ 0,01
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <label for="withdrawDescription" class="form-label">Descrição (opcional)</label>
-                            <input type="text" class="form-control" id="withdrawDescription" placeholder="Ex: Saque no ATM">
+                            <label for="withdrawMethod" class="form-label">
+                                <i class="fas fa-credit-card me-1"></i>Forma de Saque
+                            </label>
+                            <select class="form-select" id="withdrawMethod">
+                                <option value="">Selecione onde deseja sacar</option>
+                                <option value="ATM">Caixa Eletrônico (ATM)</option>
+                                <option value="AGENCIA">Agência Bancária</option>
+                                <option value="CORRESPONDENTE">Correspondente Bancário</option>
+                                <option value="PIX">PIX para outra conta</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="withdrawDescription" class="form-label">
+                                <i class="fas fa-sticky-note me-1"></i>Observações (Opcional)
+                            </label>
+                            <input type="text" class="form-control" id="withdrawDescription"
+                                   placeholder="Ex: Emergência, Compras, Viagem, etc.">
+                            <div class="form-text">
+                                <i class="fas fa-clipboard me-1"></i>
+                                Anote o motivo do saque para controle pessoal
+                            </div>
                         </div>
                     </form>
                     <div class="alert alert-danger" id="withdrawError"></div>
                     <div class="alert alert-success" id="withdrawSuccess"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" onclick="processWithdraw()">Confirmar Saque</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="processWithdraw()">
+                        <i class="fas fa-hand-holding-usd me-2"></i>Confirmar Saque
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Extrato -->
+    <div class="modal fade" id="statementModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-file-alt me-2"></i>Extrato Bancário Detalhado
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body text-center">
+                                    <h6><i class="fas fa-user me-2"></i>Titular da Conta</h6>
+                                    <p class="mb-0" id="accountHolderName">Carregando...</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body text-center">
+                                    <h6><i class="fas fa-credit-card me-2"></i>Número da Conta</h6>
+                                    <p class="mb-0" id="accountNumberStatement">Carregando...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Sobre o Extrato:</strong> Aqui você encontra todas as suas movimentações financeiras organizadas por data. Use os filtros para encontrar transações específicas.
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="startDate" class="form-label">
+                                <i class="fas fa-calendar me-1"></i>Data Inicial
+                            </label>
+                            <input type="date" class="form-control" id="startDate">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="endDate" class="form-label">
+                                <i class="fas fa-calendar me-1"></i>Data Final
+                            </label>
+                            <input type="date" class="form-control" id="endDate">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="transactionTypeFilter" class="form-label">
+                                <i class="fas fa-filter me-1"></i>Tipo de Transação
+                            </label>
+                            <select class="form-select" id="transactionTypeFilter">
+                                <option value="">Todas as transações</option>
+                                <option value="DEPOSIT">Depósitos recebidos</option>
+                                <option value="WITHDRAWAL">Saques realizados</option>
+                                <option value="TRANSFER_OUT">Transferências enviadas</option>
+                                <option value="TRANSFER_IN">Transferências recebidas</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-3">
+                        <button class="btn btn-outline-primary" onclick="filterTransactions()">
+                            <i class="fas fa-search me-2"></i>Filtrar Transações
+                        </button>
+                        <button class="btn btn-outline-success" onclick="exportStatement()">
+                            <i class="fas fa-download me-2"></i>Exportar PDF
+                        </button>
+                    </div>
+
+                    <div id="statementTransactions">
+                        <div class="text-center">
+                            <i class="fas fa-spinner fa-spin fa-2x"></i>
+                            <p class="mt-2">Carregando extrato...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Fechar
+                    </button>
                 </div>
             </div>
         </div>
