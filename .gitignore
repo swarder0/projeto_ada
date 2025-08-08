@@ -20,4 +20,29 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
-gradlew
+
+# Java
+*.class
+
+# Test reports and coverage
+/test/
+build/test-results/
+build/reports/
+build/coverage/
+*.exec
+*.ec
+
+# VSCode
+.vscode/
+
+# Kotlin/IntelliJ
+out/
+
+# Ignore generated files
+*.swp
+*.swo
+
+# Lock and binary files
+*.lock
+*.bin
+
